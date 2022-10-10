@@ -39,7 +39,7 @@ const WeatherDetails = () => {
             </p>
           </div>
           <div>
-            <h2 className="hidden sm: block sm:text-left font-semibold text-white text-3xl">
+            <h2 className="hidden sm:block sm:text-left font-semibold text-white text-3xl">
               18°C
             </h2>
             {/* <h2 className="sm:text-left ml-1 font-medium text-white text-2xl">
