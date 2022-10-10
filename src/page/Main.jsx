@@ -7,7 +7,7 @@ import DailyForecast from "../component/DailyForecast";
 const Main = () => {
   return (
     <div className="bg__img">
-      <div className="container backdrop__img w-full hide__scrollbar">
+      <div className="container backdrop__img w-full hide__scrollbar pb-8">
         <Search />
         <WeatherDetails />
         <HourlyForecast />

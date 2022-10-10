@@ -23,15 +23,19 @@ const DailyForecast = () => {
 
   const DailyForecast = dailyWeather.map((item, i) => {
     return (
-      <div className="items-center space-y-2 bg-transparent rounded p-4">
-        <img
-          className="object-contain w-16 h-16 sm:w-24 sm:h-24"
-          src={cloudy}
-          alt=""
-        />
-
-        <h2 className="font-bold text-white sm:text-3xl">18°C</h2>
-        <h2 className="font-medium text-white sm:text-2xl">Cloudy</h2>
+      <div
+        className={`${
+          i === dailyWeather.length - 1 ? null : "border-r "
+        } border-gray-500 border-opacity-10 items-center space-y-2 bg-transparent rounded p-4`}
+      >
+        <div
+          className={`w-24 sm:w-32 flex flex-col items-center justify-center`}
+        >
+          <h2 className="font-bold text-white mb-2">Today</h2>
+          <img className="object-contain w-16 h-16 " src={cloudy} alt="" />
+          <h2 className="text-white text-3xl mt-4 mb-1">18°C</h2>
+          <h2 className="font-medium text-white ">Cloudy</h2>
+        </div>
       </div>
     );
   });
@@ -39,8 +43,8 @@ const DailyForecast = () => {
   return (
     <div className="space-y-4">
       <Title title="Daily Forecast" />
-      <div className="bg-white bg-opacity-10 rounded-lg px-2 sm:px-8 overflow-x-scroll hide__scrollbar">
-        <div className="flex items-center text-center sm:space-x-8 sm:py-4">
+      <div className="bg-white bg-opacity-10 rounded-lg overflow-x-scroll hide__scrollbar">
+        <div className="flex items-center text-center sm:py-4">
           {DailyForecast}
         </div>
       </div>
