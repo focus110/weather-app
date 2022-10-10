@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Search = () => {
   const [search, setSearch] = useState("");
@@ -37,7 +38,7 @@ const Search = () => {
       return (
         <div key={i}>
           <p
-            className={`px-8 hover:bg-opacity-20 bg-white bg-opacity-10 border-opacity-10 border-white py-2 ${
+            className={`px-8 hover:bg-opacity-100 bg-white bg-opacity-10 border-opacity-10 border-gray-600 py-2 ${
               i === place.length - 1 ? null : "border-b"
             }`}
           >
@@ -48,7 +49,7 @@ const Search = () => {
     });
 
   return (
-    <div className="py-8 space-y-4 px-2 sm:px-64">
+    <div className="relative py-8 space-y-4 px-2 sm:px-64">
       {/* <h2 className="text-center font-semibold text-white">Today's Weather</h2> */}
       <form onSubmit={onSubmit}>
         <div className="bg-white bg-opacity-10 flex pl-8 rounded">
@@ -60,7 +61,10 @@ const Search = () => {
             onChange={onChange}
           />
           <div className="opacity-10 w-[1px] bg-white"></div>
-          <button className="text-white px-8 rounded">
+          <motion.button
+            whileTap={{ scale: 0.8 }}
+            className="text-white px-4 sm:px-8 rounded"
+          >
             <svg
               fill="none"
               viewBox="0 0 24 24"
@@ -74,22 +78,23 @@ const Search = () => {
                 d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
               />
             </svg>
-          </button>
+          </motion.button>
         </div>
       </form>
-
-      <div className="bg-white py-4 rounded bg-opacity-10 text-white text-sm">
-        {current.length === 0 ? (
-          <div className="px-8">
-            <h2 className="text-base pb-4 border-opacity-10 border-white border-b-[1px]">
-              Recent
-            </h2>
-            <p className="py-4">Recent search will show here</p>
-          </div>
-        ) : (
-          hints
-        )}
-      </div>
+      {current.length === 0 ? null : (
+        <div className="absolute shadow-md bg-white py-4 rounded bg-opacity-90 text-gray-600 text-sm">
+          {current.length === 0 ? (
+            <div className="px-8">
+              <h2 className="text-base pb-4 border-opacity-100 border-gray-600 border-b-[1px]">
+                Recent
+              </h2>
+              <p className="py-4">Recent search will show here</p>
+            </div>
+          ) : (
+            hints
+          )}
+        </div>
+      )}
     </div>
   );
 };
