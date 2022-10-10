@@ -85,10 +85,10 @@ const Search = () => {
         <div className="absolute shadow-md bg-white py-4 rounded bg-opacity-90 text-gray-600 text-sm">
           {current.length === 0 ? (
             <div className="px-8">
-              <h2 className="text-base pb-4 border-opacity-100 border-gray-600 border-b-[1px]">
+              {/* <h2 className="text-base pb-4 border-opacity-100 border-gray-600 border-b-[1px]">
                 Recent
-              </h2>
-              <p className="py-4">Recent search will show here</p>
+              </h2> */}
+              <p className="py-4">Use my location</p>
             </div>
           ) : (
             hints

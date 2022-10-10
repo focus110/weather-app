@@ -1,15 +1,17 @@
 import React from "react";
 import cloudy from "../assets/images/cloudy.png";
+import Title from "./Title";
 
 const WeatherDetails = () => {
   return true ? (
     <div className="text-center py-8 sm:px-96">
       <div className="flex flex-col justify-center space-y-8 bg-white bg-opacity-10 rounded-lg p-4 sm:p-8">
+        <Title title="Current Weather" />
         <div className="flex justify-between items-center space-x-4">
           <img className="object-contain w-16 h-16 " src={cloudy} alt="" />
           <div>
             <h2 className="flex space-x-2 font-medium text-white text-xl">
-              <svg
+              {/* <svg
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -26,20 +28,25 @@ const WeatherDetails = () => {
                   strokeLinejoin="round"
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                 />
-              </svg>
+              </svg> */}
               <span>Boston, MA, United State</span>
             </h2>
-            <p className="text-gray-400 font-normal">
+            <p className="text-gray-400 font-light text-left">
               12:52PM | <span>Cloudy</span>
             </p>
           </div>
           <div>
-            <h2 className="sm:text-left font-bold text-white text-3xl">18°C</h2>
+            <h2 className="sm:text-left font-semibold text-white text-3xl">
+              18°C
+            </h2>
             {/* <h2 className="sm:text-left ml-1 font-medium text-white text-2xl">
               Cloudy
             </h2> */}
           </div>
         </div>
+        <p className="text-white">
+          The skies will be mostly cloudy. The high will be 30°.
+        </p>
       </div>
     </div>
   ) : (
