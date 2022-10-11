@@ -8,6 +8,8 @@ import {
   GET_LOCATION,
   GET_LOCATION_FAIL,
   CLEAR_STATE,
+  SET_CURRENT,
+  SET_CURRENT_FAIL,
 } from "../types";
 
 const WeatherState = ({ children }) => {
@@ -16,6 +18,7 @@ const WeatherState = ({ children }) => {
     geo: null,
     loading: true,
     weather: null,
+    current: { unit: "metric" },
     forecast: null,
   };
 
@@ -24,6 +27,23 @@ const WeatherState = ({ children }) => {
   // GEO_API_URL
   const GEO_API_URL = "https://wft-geo-db.p.rapidapi.com/v1/geo";
   const OPEN_WEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
+
+  // SET_CURRENT
+  const setCurrent = ({ lat, lon, unit, name, countryCode, country }) => {
+    const payload = {};
+    if (lat) payload.lat = lat;
+    if (lon) payload.lon = lon;
+    if (unit) payload.unit = unit;
+    if (name) payload.name = name;
+    if (countryCode) payload.countryCode = countryCode;
+    if (country) payload.country = country;
+
+    try {
+      dispatch({ type: SET_CURRENT, payload: payload });
+    } catch (error) {
+      dispatch({ type: SET_CURRENT_FAIL, payload: error });
+    }
+  };
 
   // GET_LOCATION LAT & LON
   const getLocation = async (inputValue) => {
@@ -103,10 +123,12 @@ const WeatherState = ({ children }) => {
         loading: state.loading,
         weather: state.weather,
         forecast: state.forecast,
+        current: state.current,
         getLocation,
         getWeather,
         clearState,
         getForecast,
+        setCurrent,
       }}
     >
       {children}

@@ -1,18 +1,25 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import WeatherContext from "../context/weatherData/weatherContext";
 
 const Search = () => {
   const [search, setSearch] = useState("");
   const [place, setplace] = useState([{}]);
-  const [current, setCurrent] = useState({ unit: "metric" });
+  // const [current, setCurrent] = useState();
 
   const [target, setTarget] = useState(null);
 
   const weatherContext = useContext(WeatherContext);
-  const { getLocation, getWeather, geo, weather, loading, clearState } =
-    weatherContext;
+  const {
+    getLocation,
+    getWeather,
+    geo,
+    weather,
+    current,
+    setCurrent,
+    loading,
+    clearState,
+  } = weatherContext;
 
   const [focused, setFocused] = useState(false);
 
@@ -40,7 +47,7 @@ const Search = () => {
     if (current.lat) {
       getWeather(current);
     }
-  }, [current]);
+  }, [current, getWeather]);
 
   const inputRef = useRef(null);
   const formRef = useRef(null);
@@ -72,6 +79,9 @@ const Search = () => {
                 ...current,
                 lat: item.latitude,
                 lon: item.longitude,
+                name: item?.name,
+                countryCode: item?.countryCode,
+                country: item?.country,
               })
             }
           >
@@ -85,23 +95,23 @@ const Search = () => {
   });
 
   const onclk = (e) => {
-    if (inputRef.current != e.target) {
+    if (inputRef.current !== e.target) {
       setFocused(false);
       setTarget(e.target);
     }
   };
 
-  const onclck = (e) => {
-    if (formRef.current != e.target) {
-      setFocused(false);
-    }
-  };
+  // const onclck = (e) => {
+  //   if (formRef.current !== e.target) {
+  //     setFocused(false);
+  //   }
+  // };
 
   const changeUnit = (e) => {
-    setCurrent({ unit: e.target.value });
+    setCurrent({ ...current, unit: e.target.value });
   };
 
-  console.log(current);
+  // console.log(current);
   // console.log(weather);
 
   return (

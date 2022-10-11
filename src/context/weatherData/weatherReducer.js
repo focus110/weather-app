@@ -4,11 +4,13 @@ import {
   GET_LOCATION,
   GET_LOCATION_FAIL,
   CLEAR_STATE,
+  SET_CURRENT,
+  SET_CURRENT_FAIL,
 } from "../types";
 
 const weather = (state, action) => {
-  console.log("action: \n", action);
-  console.log("STATE: \n", state);
+  // console.log("action: \n", action);
+  // console.log("STATE: \n", state);
 
   switch (action.type) {
     case GET_LOCATION:
@@ -26,6 +28,12 @@ const weather = (state, action) => {
         }),
         loading: false,
       };
+    case SET_CURRENT:
+      return {
+        ...state,
+        current: action.payload,
+        loading: false,
+      };
 
     case GET_WEATHER:
       return {
@@ -36,11 +44,13 @@ const weather = (state, action) => {
 
     case GET_LOCATION_FAIL:
     case GET_WEATHER_FAIL:
+    case SET_CURRENT_FAIL:
       return {
         weather: null,
         error: action.payload,
         geo: null,
         loading: false,
+        current: {},
       };
 
     case CLEAR_STATE:
