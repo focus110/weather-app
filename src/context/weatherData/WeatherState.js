@@ -7,13 +7,13 @@ import {
   GET_WEATHER_FAIL,
   GET_LOCATION,
   GET_LOCATION_FAIL,
+  CLEAR_STATE,
 } from "../types";
 
 const WeatherState = ({ children }) => {
   const initialState = {
     error: null,
     geo: null,
-    label: null,
     loading: true,
   };
 
@@ -23,11 +23,11 @@ const WeatherState = ({ children }) => {
   const GEO_API_URL = "https://wft-geo-db.p.rapidapi.com/v1/geo";
 
   // GET_LOCATION LAT & LON
-  const getLocation = async (inputgeo) => {
+  const getLocation = async (inputValue) => {
     const options = {
       method: "GET",
       url: GEO_API_URL + "/cities",
-      params: { minPopulation: "1000000", namePrefix: inputgeo },
+      params: { namePrefix: inputValue },
       headers: {
         "X-RapidAPI-Key": process.env.REACT_APP_GEO_API_KEY,
         "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
@@ -62,15 +62,18 @@ const WeatherState = ({ children }) => {
     }
   };
 
+  // CLEAR STATE
+  const clearState = () => dispatch({ type: CLEAR_STATE });
+
   return (
     <weatherContext.Provider
       value={{
         error: state.error,
         geo: state.geo,
-        label: state.label,
         loading: state.loading,
         getLocation,
         getWeather,
+        clearState,
       }}
     >
       {children}

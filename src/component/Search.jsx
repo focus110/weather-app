@@ -6,20 +6,30 @@ import WeatherContext from "../context/weatherData/weatherContext";
 const Search = () => {
   const [search, setSearch] = useState("");
   const [place, setplace] = useState([{}]);
+  const [current, setCurrent] = useState([]);
+  const [target, setTarget] = useState(null);
 
   const weatherContext = useContext(WeatherContext);
-  const { getLocation, geo } = weatherContext;
+  const { getLocation, geo, loading, clearState } = weatherContext;
 
   const [focused, setFocused] = useState(false);
 
   // console.log("search" + search, current);
 
   const onFocus = () => setFocused(true);
-  const onBlur = () => setFocused(false);
+  const onBlur = () => {
+    if (document.current != inputRef) {
+      console.log(document.current);
+      // setFocused(false);
+    }
+  };
 
   const onChange = (e) => {
     setSearch(e.target.value);
-    if (search.trim()) getLocation(search);
+
+    if (e.target.value?.trim()) {
+      clearState();
+    }
   };
 
   useEffect(() => {
@@ -27,30 +37,56 @@ const Search = () => {
     setplace(geo);
   }, [geo]);
 
+  // useEffect(() => {setplace(geo)}, []);
+
   const inputRef = useRef(null);
+  const formRef = useRef(null);
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    // if (!search.trim()) return null;
-    // getLocation(search);
+    if (search.trim() === "") {
+      setplace([]);
+    } else {
+      clearState();
+      getLocation(search);
+    }
 
     inputRef.current?.blur();
   };
 
-  const list = place.map((item, i) => {
+  const list = place?.map((item, i) => {
     return (
       <div key={i}>
         <p
-          className={`px-8 hover:bg-opacity-100 hover:rounded bg-white bg-opacity-10 border-opacity-10 border-gray-600 py-4 ${
-            i === place.length - 1 ? null : "border-b"
+          className={`space-x-1 px-8 hover:bg-opacity-100 hover:rounded bg-white bg-opacity-10 border-opacity-10 border-gray-600 py-4 ${
+            i === place?.length - 1 ? null : "border-b"
           }`}
         >
-          <Link to="!#"> {item.name}</Link>
+          <button onClick={() => setCurrent(item.name)}>
+            {item?.name + ","}
+          </button>
+          <span>{item?.countryCode?.toUpperCase() + ","}</span>
+          <span>{item?.country}</span>
         </p>
       </div>
     );
   });
+
+  const onclk = (e) => {
+    if (inputRef.current != e.target) {
+      setFocused(false);
+      setTarget(e.target);
+    }
+  };
+
+  const onclck = (e) => {
+    if (formRef.current != e.target) {
+      setFocused(false);
+    }
+  };
+
+  console.log(current);
 
   return (
     <div className="relative py-8 space-y-4 px-2 sm:px-64">
@@ -88,30 +124,43 @@ const Search = () => {
         </div>
       </form>
 
-      <div className="absolute w-full sm:w-96 shadow-md bg-white rounded bg-opacity-90 text-gray-600 text-sm">
-        {!focused ? null : place.length === 0 ? (
-          <div className="flex items-center space-x-4 px-8">
-            <button className="py-4">Use my location </button>
-            <button>
-              <svg
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                />
-              </svg>
-            </button>
+      <div
+        // ref={inputRef}
+        onClick={(e) => onclk(e)}
+        className="absolute w-full sm:w-96 shadow-md bg-white rounded bg-opacity-90 text-gray-600 text-sm"
+      >
+        {!focused ? null : loading ? (
+          <p className="px-8 py-4 border-gray-600 border-opacity-10 border-b">
+            Loading...
+          </p>
+        ) : place.length === 0 ? (
+          <div className="">
+            <p className="px-8 py-4 border-gray-600 border-opacity-10 border-b">
+              No result found
+            </p>
+            <div className="flex items-center space-x-4 px-8">
+              <button className="py-4">Use my location </button>
+              <button>
+                <svg
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         ) : (
           list

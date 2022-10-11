@@ -2,3 +2,4 @@ export const GET_WEATHER = "GET_WEATHER";
 export const GET_WEATHER_FAIL = "GET_WEATHER_FAIL";
 export const GET_LOCATION = "GET_LOCATION";
 export const GET_LOCATION_FAIL = "GET_LOCATION_FAIL";
+export const CLEAR_STATE = "CLEAR_STATE";

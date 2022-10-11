@@ -3,11 +3,12 @@ import {
   GET_WEATHER_FAIL,
   GET_LOCATION,
   GET_LOCATION_FAIL,
+  CLEAR_STATE,
 } from "../types";
 
 const weather = (state, action) => {
   console.log("action: \n", action);
-  console.log("STATE: \n", state);
+  // console.log("STATE: \n", state);
 
   switch (action.type) {
     case GET_LOCATION:
@@ -15,10 +16,11 @@ const weather = (state, action) => {
         error: null,
         geo: action.payload.map((item) => {
           return {
-            latitude: item.latitude,
-            longitude: item.longitude,
-            name: item.name,
-            countryCode: item.countryCode,
+            latitude: item?.latitude,
+            longitude: item?.longitude,
+            name: item?.name,
+            countryCode: item?.countryCode,
+            country: item?.country,
           };
         }),
         loading: false,
@@ -37,6 +39,13 @@ const weather = (state, action) => {
         error: action.payload,
         geo: null,
         loading: false,
+      };
+
+    case CLEAR_STATE:
+      return {
+        error: null,
+        geo: null,
+        loading: true,
       };
 
     default:
