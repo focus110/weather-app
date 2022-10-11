@@ -8,11 +8,12 @@ import {
 
 const weather = (state, action) => {
   console.log("action: \n", action);
-  // console.log("STATE: \n", state);
+  console.log("STATE: \n", state);
 
   switch (action.type) {
     case GET_LOCATION:
       return {
+        ...state,
         error: null,
         geo: action.payload.map((item) => {
           return {
@@ -29,24 +30,21 @@ const weather = (state, action) => {
     case GET_WEATHER:
       return {
         ...state,
-        geo: action.payload,
+        weather: action.payload,
         loading: false,
       };
 
     case GET_LOCATION_FAIL:
     case GET_WEATHER_FAIL:
       return {
+        weather: null,
         error: action.payload,
         geo: null,
         loading: false,
       };
 
     case CLEAR_STATE:
-      return {
-        error: null,
-        geo: null,
-        loading: true,
-      };
+      return { ...state, error: null, geo: null, loading: true };
 
     default:
       return state;

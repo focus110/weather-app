@@ -6,11 +6,13 @@ import WeatherContext from "../context/weatherData/weatherContext";
 const Search = () => {
   const [search, setSearch] = useState("");
   const [place, setplace] = useState([{}]);
-  const [current, setCurrent] = useState([]);
+  const [current, setCurrent] = useState({ unit: "metric" });
+
   const [target, setTarget] = useState(null);
 
   const weatherContext = useContext(WeatherContext);
-  const { getLocation, geo, loading, clearState } = weatherContext;
+  const { getLocation, getWeather, geo, weather, loading, clearState } =
+    weatherContext;
 
   const [focused, setFocused] = useState(false);
 
@@ -18,10 +20,7 @@ const Search = () => {
 
   const onFocus = () => setFocused(true);
   const onBlur = () => {
-    if (document.current != inputRef) {
-      console.log(document.current);
-      // setFocused(false);
-    }
+    // setFocused(false);
   };
 
   const onChange = (e) => {
@@ -37,7 +36,11 @@ const Search = () => {
     setplace(geo);
   }, [geo]);
 
-  // useEffect(() => {setplace(geo)}, []);
+  useEffect(() => {
+    if (current.lat) {
+      getWeather(current);
+    }
+  }, [current]);
 
   const inputRef = useRef(null);
   const formRef = useRef(null);
@@ -63,7 +66,15 @@ const Search = () => {
             i === place?.length - 1 ? null : "border-b"
           }`}
         >
-          <button onClick={() => setCurrent(item.name)}>
+          <button
+            onClick={() =>
+              setCurrent({
+                ...current,
+                lat: item.latitude,
+                lon: item.longitude,
+              })
+            }
+          >
             {item?.name + ","}
           </button>
           <span>{item?.countryCode?.toUpperCase() + ","}</span>
@@ -86,7 +97,12 @@ const Search = () => {
     }
   };
 
+  const changeUnit = (e) => {
+    setCurrent({ unit: e.target.value });
+  };
+
   console.log(current);
+  // console.log(weather);
 
   return (
     <div className="relative py-8 space-y-4 px-2 sm:px-64">
@@ -102,6 +118,23 @@ const Search = () => {
             value={search}
             onChange={onChange}
           />
+
+          <div className="hidden sm:block px-2 rounded">
+            <select
+              className="text-gray-300 w-16 outline-none active:outline-none bg-transparent px-2 rounded h-full"
+              name="unit"
+              value={current?.unit}
+              onChange={changeUnit}
+            >
+              <option className="text-gray-600 " defaultValue value="metric">
+                °C
+              </option>
+              <option className="text-gray-600 " value="standard">
+                °F
+              </option>
+            </select>
+          </div>
+
           <div className="opacity-10 w-[1px] bg-white"></div>
           <motion.button
             whileTap={{ scale: 0.8 }}

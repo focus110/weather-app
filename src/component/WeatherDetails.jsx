@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import cloudy from "../assets/images/cloudy.png";
+import WeatherContext from "../context/weatherData/weatherContext";
 import Title from "./Title";
 
 const WeatherDetails = () => {
+  const weatherContext = useContext(WeatherContext);
+  const { weather } = weatherContext;
+
   return true ? (
     <div className="text-center pb-8 sm:px-96">
       <div className="flex flex-col justify-center space-y-8 bg-white bg-opacity-10 rounded-lg p-8">

@@ -15,12 +15,15 @@ const WeatherState = ({ children }) => {
     error: null,
     geo: null,
     loading: true,
+    weather: null,
+    forecast: null,
   };
 
   const [state, dispatch] = useReducer(weatherReducer, initialState);
 
   // GEO_API_URL
   const GEO_API_URL = "https://wft-geo-db.p.rapidapi.com/v1/geo";
+  const OPEN_WEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
 
   // GET_LOCATION LAT & LON
   const getLocation = async (inputValue) => {
@@ -43,13 +46,40 @@ const WeatherState = ({ children }) => {
   };
 
   // GET WEATHER
-  const getWeather = async (inputgeo) => {
+  const getWeather = async ({ lat, lon, unit }) => {
     const options = {
       method: "GET",
-      url: GEO_API_URL + "/cities?minPopulation=1000000&namePrefix=" + inputgeo,
+      url: `${OPEN_WEATHER_API_URL}/weather`,
+      params: {
+        lat,
+        lon,
+        appid: `${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`,
+        units: unit,
+      },
+    };
+
+    try {
+      const res = await axios.request(options);
+
+      dispatch({ type: GET_WEATHER, payload: res.data });
+    } catch (error) {
+      dispatch({ type: GET_WEATHER_FAIL, payload: error });
+    }
+  };
+
+  // GET FORECAST
+  const getForecast = async ({ lat, lon }) => {
+    const options = {
+      method: "GET",
+      url: `${OPEN_WEATHER_API_URL}/forecast`,
+      params: {
+        lat: `${lat}`,
+        lon: `${lon}`,
+        appid: `${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`,
+      },
       headers: {
-        "X-RapidAPI-Key": process.env.REACT_GEO_API_KEY,
-        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+        // "X-RapidAPI-Key": process.env.REACT_APP_OPEN_WEATHER_API_KEY,
+        // "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
       },
     };
 
@@ -71,9 +101,12 @@ const WeatherState = ({ children }) => {
         error: state.error,
         geo: state.geo,
         loading: state.loading,
+        weather: state.weather,
+        forecast: state.forecast,
         getLocation,
         getWeather,
         clearState,
+        getForecast,
       }}
     >
       {children}
