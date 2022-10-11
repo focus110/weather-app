@@ -23,6 +23,10 @@ code {
     monospace;
 }
 
+.form_active:active {
+  display: block;
+}
+
 .bg__img {
   background-image: url(./assets/images/03.jpg);
   background-repeat: no-repeat;

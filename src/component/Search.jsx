@@ -1,52 +1,56 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import WeatherContext from "../context/weatherData/weatherContext";
 
 const Search = () => {
   const [search, setSearch] = useState("");
-  const [place, setplace] = useState([
-    "Boston, MA, United State",
-    "Lagos, LA, Nigeria",
-    "Lagrange, GA, United States",
-  ]);
+  const [place, setplace] = useState([{}]);
 
-  const [current, setCurrent] = useState([]);
+  const weatherContext = useContext(WeatherContext);
+  const { getLocation, geo } = weatherContext;
+
+  const [focused, setFocused] = useState(false);
+
+  // console.log("search" + search, current);
+
+  const onFocus = () => setFocused(true);
+  const onBlur = () => setFocused(false);
 
   const onChange = (e) => {
     setSearch(e.target.value);
-
-    const filtered = place.filter((s) => {
-      const regex = new RegExp(search, "gi");
-      return regex === "" ? s : s.toLocaleLowerCase().match(regex);
-    });
-
-    setCurrent(filtered);
+    if (search.trim()) getLocation(search);
   };
 
-  console.log(current);
+  useEffect(() => {
+    if (geo === null) return setplace([]);
+    setplace(geo);
+  }, [geo]);
+
+  const inputRef = useRef(null);
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    // if (!search.trim()) return null;
+    // getLocation(search);
+
+    inputRef.current?.blur();
   };
 
-  const hints = current
-    .filter((s) => {
-      const regex = new RegExp(search, "gi");
-      return regex === "" ? current : s.toLocaleLowerCase().match(regex);
-    })
-    .map((item, i) => {
-      return (
-        <div key={i}>
-          <p
-            className={`px-8 hover:bg-opacity-100 bg-white bg-opacity-10 border-opacity-10 border-gray-600 py-2 ${
-              i === place.length - 1 ? null : "border-b"
-            }`}
-          >
-            <Link to="!#"> {item}</Link>
-          </p>
-        </div>
-      );
-    });
+  const list = place.map((item, i) => {
+    return (
+      <div key={i}>
+        <p
+          className={`px-8 hover:bg-opacity-100 hover:rounded bg-white bg-opacity-10 border-opacity-10 border-gray-600 py-4 ${
+            i === place.length - 1 ? null : "border-b"
+          }`}
+        >
+          <Link to="!#"> {item.name}</Link>
+        </p>
+      </div>
+    );
+  });
 
   return (
     <div className="relative py-8 space-y-4 px-2 sm:px-64">
@@ -54,9 +58,11 @@ const Search = () => {
       <form onSubmit={onSubmit}>
         <div className="bg-white bg-opacity-10 flex pl-8 rounded">
           <input
+            onFocus={onFocus}
+            onBlur={onBlur}
             className="bg-transparent text-white w-full h-16 outline-none rounded"
             type="text"
-            placeholder="Search place"
+            placeholder="Search city"
             value={search}
             onChange={onChange}
           />
@@ -81,20 +87,37 @@ const Search = () => {
           </motion.button>
         </div>
       </form>
-      {current.length === 0 ? null : (
-        <div className="absolute shadow-md bg-white py-4 rounded bg-opacity-90 text-gray-600 text-sm">
-          {current.length === 0 ? (
-            <div className="px-8">
-              {/* <h2 className="text-base pb-4 border-opacity-100 border-gray-600 border-b-[1px]">
-                Recent
-              </h2> */}
-              <p className="py-4">Use my location</p>
-            </div>
-          ) : (
-            hints
-          )}
-        </div>
-      )}
+
+      <div className="absolute w-full sm:w-96 shadow-md bg-white rounded bg-opacity-90 text-gray-600 text-sm">
+        {!focused ? null : place.length === 0 ? (
+          <div className="flex items-center space-x-4 px-8">
+            <button className="py-4">Use my location </button>
+            <button>
+              <svg
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        ) : (
+          list
+        )}
+      </div>
+      {/* )} */}
     </div>
   );
 };

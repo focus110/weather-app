@@ -24,6 +24,7 @@ const DailyForecast = () => {
   const DailyForecast = dailyWeather.map((item, i) => {
     return (
       <div
+        key={i}
         className={`${
           i === dailyWeather.length - 1 ? null : "border-r "
         } border-gray-500 border-opacity-10 items-center space-y-2 bg-transparent rounded p-4`}
