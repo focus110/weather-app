@@ -110,12 +110,23 @@ const WeatherDetails = () => {
       ) : true ? (
         <div className="bg-white bg-opacity-10 rounded py-8 px-8 text-white">
           <div className="flex justify-between items-center">
-            <div className="text-left text-lg border-white border-opacity-10 border-r pr-4">
-              <h2 className="font-extralight mb-4">Sunny</h2>
-              <h2 className="font-medium text-6xl">25°</h2>
+            <div className="text-left text-lg border-gray-600 border-opacity-10 border-r pr-4">
+              <h2 className="font-extralight mb-4">
+                {weather?.weather[0]?.main}
+              </h2>
+              <h2 className="font-medium text-6xl flex">
+                {weather?.main?.temp.toString().split(".")[0]}
+                <span className="text-6xl">
+                  {current.unit === "metric"
+                    ? "°"
+                    : current.unit === "standard"
+                    ? "°F"
+                    : null}
+                </span>
+              </h2>
             </div>
             <div className="text-left">
-              <p>Monday, 21 september</p>
+              <p>{`${date}`}</p>
               <div className="flex items-start pt-2 text-sm">
                 <svg
                   fill="none"
@@ -135,7 +146,11 @@ const WeatherDetails = () => {
                     d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                   />
                 </svg>
-                <p className="pl-2">San Fransisco</p>
+                <p className="pl-2">
+                  {current?.name + ", "}
+                  <span>{current?.countryCode?.toUpperCase() + ", "}</span>
+                  <span>{current?.country}</span>
+                </p>
               </div>
             </div>
             <img className="object-contain w-16 h-16 " src={cloudy} alt="" />

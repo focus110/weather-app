@@ -5,3 +5,5 @@ export const GET_LOCATION_FAIL = "GET_LOCATION_FAIL";
 export const CLEAR_STATE = "CLEAR_STATE";
 export const SET_CURRENT = "SET_CURRENT";
 export const SET_CURRENT_FAIL = "SET_CURRENT_FAIL";
+export const GET_FORECAST = "GET_FORECAST";
+export const GET_FORECAST_FAIL = "GET_FORECAST_FAIL";

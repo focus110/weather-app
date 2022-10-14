@@ -6,6 +6,8 @@ import {
   CLEAR_STATE,
   SET_CURRENT,
   SET_CURRENT_FAIL,
+  GET_FORECAST,
+  GET_FORECAST_FAIL,
 } from "../types";
 
 const weather = (state, action) => {
@@ -19,11 +21,11 @@ const weather = (state, action) => {
         error: null,
         geo: action.payload.map((item) => {
           return {
-            latitude: item?.latitude,
-            longitude: item?.longitude,
-            name: item?.name,
-            countryCode: item?.countryCode,
-            country: item?.country,
+            key: item?.Key,
+            name: item?.AdministrativeArea?.LocalizedName,
+            localizedName: item?.LocalizedName,
+            countryCode: item?.Country?.ID,
+            country: item?.Country?.LocalizedName,
           };
         }),
         loading: false,
@@ -41,12 +43,20 @@ const weather = (state, action) => {
         weather: action.payload,
         loading: false,
       };
+    case GET_FORECAST:
+      return {
+        ...state,
+        forecast: action.payload,
+        loading: false,
+      };
 
     case GET_LOCATION_FAIL:
     case GET_WEATHER_FAIL:
     case SET_CURRENT_FAIL:
+    case GET_FORECAST_FAIL:
       return {
         weather: null,
+        forecast: null,
         error: action.payload,
         geo: null,
         loading: false,

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import WeatherContext from "../context/weatherData/weatherContext";
+import axios from "axios";
 
 const Search = () => {
   const [search, setSearch] = useState("");
@@ -11,8 +12,9 @@ const Search = () => {
 
   const weatherContext = useContext(WeatherContext);
   const {
-    getLocation,
+    autocomplete,
     getWeather,
+    getForecast,
     geo,
     weather,
     current,
@@ -38,16 +40,43 @@ const Search = () => {
     }
   };
 
+  // get location onload
+  useEffect(() => {
+    // navigator.geolocation.getCurrentPosition(function (position) {
+    //   console.log("Latitude is :", position.coords.latitude);
+    //   console.log("Longitude is :", position.coords.longitude);
+    //   const config = {
+    //     method: "get",
+    //     url: `https://api.geoapify.com/v1/geocode/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&apiKey=${process.env.REACT_APP_REVERSE_GEO_API_KEY}`,
+    //     headers: {},
+    //   };
+    //   axios(config)
+    //     .then(function (response) {
+    //       console.log(response.data);
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error);
+    //     });
+    //   getWeather({
+    //     lat: position.coords.latitude,
+    //     lon: position.coords.longitude,
+    //   });
+    // });
+    // getWeather(current);
+    // console.log(current);
+  }, []);
+
   useEffect(() => {
     if (geo === null) return setplace([]);
     setplace(geo);
   }, [geo]);
 
   useEffect(() => {
-    if (current.lat) {
+    if (current.Key) {
       getWeather(current);
+      // getForecast(current);
     }
-  }, [current, getWeather]);
+  }, [current]);
 
   const inputRef = useRef(null);
   const formRef = useRef(null);
@@ -59,7 +88,7 @@ const Search = () => {
       setplace([]);
     } else {
       clearState();
-      getLocation(search);
+      autocomplete(search);
     }
 
     inputRef.current?.blur();
@@ -76,10 +105,9 @@ const Search = () => {
           <button
             onClick={() =>
               setCurrent({
-                ...current,
-                lat: item.latitude,
-                lon: item.longitude,
+                key: item?.key,
                 name: item?.name,
+                localizedName: item?.localizedName,
                 countryCode: item?.countryCode,
                 country: item?.country,
               })
