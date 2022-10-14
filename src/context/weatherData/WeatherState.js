@@ -23,7 +23,7 @@ const WeatherState = ({ children }) => {
     loading: true,
     weather: null,
     current: { unit: "metric" },
-    forecast: null,
+    forecast: { hourly: null, daily: null },
   };
 
   const [state, dispatch] = useReducer(weatherReducer, initialState);

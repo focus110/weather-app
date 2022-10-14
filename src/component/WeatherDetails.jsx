@@ -6,11 +6,8 @@ import Title from "./Title";
 const WeatherDetails = () => {
   const weatherContext = useContext(WeatherContext);
   const { weather, current } = weatherContext;
-  const { count, setCount } = useState(null);
 
   const date = new Date().toLocaleTimeString();
-
-  // console.log(current);
 
   return (
     <div className="text-center pb-8 sm:px-96">
@@ -111,18 +108,13 @@ const WeatherDetails = () => {
         <div className="bg-white bg-opacity-10 rounded py-8 px-8 text-white">
           <div className="flex justify-between items-center">
             <div className="text-left text-lg border-gray-600 border-opacity-10 border-r pr-4">
-              <h2 className="font-extralight mb-4">
-                {/* {weather?.weather[0]?.main} */}
-              </h2>
+              <h2 className="font-extralight mb-4">{weather?.WeatherText}</h2>
               <h2 className="font-medium text-6xl flex">
-                {weather?.main?.temp.toString().split(".")[0]}
-                <span className="text-6xl">
-                  {current.unit === "metric"
-                    ? "°"
-                    : current.unit === "standard"
-                    ? "°F"
-                    : null}
-                </span>
+                {current.unit === "metric"
+                  ? `${weather?.Temperature?.Metric?.value}°${weather?.Temperature?.Metric?.value}`
+                  : current.unit === "standard"
+                  ? `${weather?.Temperature?.Imperial?.value}°${weather?.Temperature?.Imperial?.value}`
+                  : null}
               </h2>
             </div>
             <div className="text-left">
