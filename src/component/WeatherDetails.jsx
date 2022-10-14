@@ -112,7 +112,7 @@ const WeatherDetails = () => {
           <div className="flex justify-between items-center">
             <div className="text-left text-lg border-gray-600 border-opacity-10 border-r pr-4">
               <h2 className="font-extralight mb-4">
-                {weather?.weather[0]?.main}
+                {/* {weather?.weather[0]?.main} */}
               </h2>
               <h2 className="font-medium text-6xl flex">
                 {weather?.main?.temp.toString().split(".")[0]}

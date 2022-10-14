@@ -50,7 +50,7 @@ const WeatherState = ({ children }) => {
   const autocomplete = async (q) => {
     const options = {
       method: "GET",
-      url: GEO_API_URL + "/locations/v1/cities/autocomplete",
+      url: ACCU_WEATHER_API_URL + "/locations/v1/cities/autocomplete",
       params: { q, apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY },
     };
 
@@ -66,14 +66,15 @@ const WeatherState = ({ children }) => {
   const getWeather = async ({ Key }) => {
     const options = {
       method: "GET",
-      url: `${ACCU_WEATHER_API_URL}/currentconditions/v1/daily/1day/${Key}`,
+      url: `${ACCU_WEATHER_API_URL}/currentconditions/v1/${Key}`,
       params: {
-        apikey: `${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`,
+        apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY,
         details: true,
       },
-      headers: {
+      header: {
         // "X-RapidAPI-Key": process.env.REACT_APP_OPEN_WEATHER_API_KEY,
         "Access-Control-Allow-Origin": "*",
+        Host: "dataservice.accuweather.com",
       },
     };
 
