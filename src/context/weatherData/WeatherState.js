@@ -12,6 +12,8 @@ import {
   SET_CURRENT_FAIL,
   GET_FORECAST,
   GET_FORECAST_FAIL,
+  USE_MY_GEO_POSITION,
+  USE_MY_GEO_POSITION_FAIL,
 } from "../types";
 
 const WeatherState = ({ children }) => {
@@ -27,7 +29,6 @@ const WeatherState = ({ children }) => {
   const [state, dispatch] = useReducer(weatherReducer, initialState);
 
   // GEO_API_URL
-  const GEO_API_URL = "https://dataservice.accuweather.com";
   const ACCU_WEATHER_API_URL = "https://dataservice.accuweather.com";
 
   // SET_CURRENT
@@ -46,7 +47,7 @@ const WeatherState = ({ children }) => {
     }
   };
 
-  // autocomplete
+  // AUTOCOMPLETE
   const autocomplete = async (q) => {
     const options = {
       method: "GET",
@@ -62,17 +63,16 @@ const WeatherState = ({ children }) => {
     }
   };
 
-  // get weather
+  // GET WEATHER
   const getWeather = async ({ Key }) => {
     const options = {
       method: "GET",
       url: `${ACCU_WEATHER_API_URL}/currentconditions/v1/${Key}`,
       params: {
         apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY,
-        details: true,
+        details: false,
       },
       header: {
-        // "X-RapidAPI-Key": process.env.REACT_APP_OPEN_WEATHER_API_KEY,
         "Access-Control-Allow-Origin": "*",
         Host: "dataservice.accuweather.com",
       },
@@ -80,28 +80,39 @@ const WeatherState = ({ children }) => {
 
     try {
       const res = await axios.request(options);
-      console.log(res);
+
       dispatch({ type: GET_WEATHER, payload: res.data });
     } catch (error) {
       dispatch({ type: GET_WEATHER_FAIL, payload: error });
     }
   };
 
-  // GET FORECAST
-  const getForecast = async ({ lat, lon }) => {
+  // USE MY GEO POSITION
+  const useMyGeoPos = async ({ lat, lon }) => {
     const options = {
       method: "GET",
-      // url: `${OPEN_WEATHER_API_URL}/forecast/hourly`,
+      url: `${ACCU_WEATHER_API_URL}/`,
       params: {
-        lat: `${lat}`,
-        lon: `${lon}`,
-        appid: `${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`,
+        apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY,
       },
-      // headers: {
-      //   "X-RapidAPI-Key": process.env.REACT_APP_OPEN_WEATHER_API_KEY,
-      //   "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
-      // },
+      header: {
+        "Access-Control-Allow-Origin": "*",
+        Host: "dataservice.accuweather.com",
+      },
     };
+
+    try {
+      const res = await axios.request(options);
+
+      dispatch({ type: USE_MY_GEO_POSITION, payload: res.data });
+    } catch (error) {
+      dispatch({ type: USE_MY_GEO_POSITION_FAIL, payload: error });
+    }
+  };
+
+  // GET FORECAST
+  const getForecast = async ({ lat, lon }) => {
+    const options = {};
 
     try {
       const res = await axios.request(options);
@@ -126,6 +137,7 @@ const WeatherState = ({ children }) => {
         current: state.current,
         autocomplete,
         getWeather,
+        useMyGeoPos,
         clearState,
         getForecast,
         setCurrent,

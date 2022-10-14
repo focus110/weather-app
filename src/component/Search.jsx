@@ -14,6 +14,7 @@ const Search = () => {
   const {
     autocomplete,
     getWeather,
+    useMyGeoPos,
     getForecast,
     geo,
     weather,
@@ -24,8 +25,6 @@ const Search = () => {
   } = weatherContext;
 
   const [focused, setFocused] = useState(false);
-
-  // console.log("search" + search, current);
 
   const onFocus = () => setFocused(true);
   const onBlur = () => {
@@ -39,32 +38,6 @@ const Search = () => {
       clearState();
     }
   };
-
-  // get location onload
-  useEffect(() => {
-    // navigator.geolocation.getCurrentPosition(function (position) {
-    //   console.log("Latitude is :", position.coords.latitude);
-    //   console.log("Longitude is :", position.coords.longitude);
-    //   const config = {
-    //     method: "get",
-    //     url: `https://api.geoapify.com/v1/geocode/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&apiKey=${process.env.REACT_APP_REVERSE_GEO_API_KEY}`,
-    //     headers: {},
-    //   };
-    //   axios(config)
-    //     .then(function (response) {
-    //       console.log(response.data);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     });
-    //   getWeather({
-    //     lat: position.coords.latitude,
-    //     lon: position.coords.longitude,
-    //   });
-    // });
-    // getWeather(current);
-    // console.log(current);
-  }, []);
 
   useEffect(() => {
     if (geo === null) return setplace([]);
@@ -139,6 +112,14 @@ const Search = () => {
     setCurrent({ ...current, unit: e.target.value });
   };
 
+  const useMyLocation = () => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      useMyGeoPos({ lat, lon });
+    });
+  };
+
   // console.log(current);
   // console.log(weather);
 
@@ -210,7 +191,9 @@ const Search = () => {
               No result found
             </p>
             <div className="flex items-center space-x-4 px-8">
-              <button className="py-4">Use my location </button>
+              <button className="py-4" onClick={useMyLocation}>
+                Use my location{" "}
+              </button>
               <button>
                 <svg
                   fill="none"

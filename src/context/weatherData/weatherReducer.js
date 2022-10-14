@@ -8,6 +8,9 @@ import {
   SET_CURRENT_FAIL,
   GET_FORECAST,
   GET_FORECAST_FAIL,
+  USE_MY_GEO_POSITION,
+  USE_MY_GEO_POSITION,
+  USE_MY_GEO_POSITION_FAIL,
 } from "../types";
 
 const weather = (state, action) => {
@@ -30,6 +33,7 @@ const weather = (state, action) => {
         }),
         loading: false,
       };
+
     case SET_CURRENT:
       return {
         ...state,
@@ -43,6 +47,14 @@ const weather = (state, action) => {
         weather: action.payload,
         loading: false,
       };
+
+    case USE_MY_GEO_POSITION_FAIL:
+      return {
+        ...state,
+        weather: action.payload,
+        loading: false,
+      };
+
     case GET_FORECAST:
       return {
         ...state,
@@ -54,6 +66,7 @@ const weather = (state, action) => {
     case GET_WEATHER_FAIL:
     case SET_CURRENT_FAIL:
     case GET_FORECAST_FAIL:
+    case USE_MY_GEO_POSITION_FAIL:
       return {
         weather: null,
         forecast: null,
