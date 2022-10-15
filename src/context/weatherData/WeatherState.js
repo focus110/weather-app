@@ -22,7 +22,13 @@ const WeatherState = ({ children }) => {
     geo: null,
     loading: true,
     weather: null,
-    current: { unit: "metric" },
+    current: {
+      Key: "254085",
+      country: "Nigeria",
+      countryCode: "NG",
+      localizedName: "Abuja",
+      name: "Abuja",
+    },
     forecast: { hourly: null, daily: null },
   };
 
@@ -32,9 +38,17 @@ const WeatherState = ({ children }) => {
   const ACCU_WEATHER_API_URL = "https://dataservice.accuweather.com";
 
   // SET_CURRENT
-  const setCurrent = ({ key, name, localizedName, countryCode, country }) => {
+  const setCurrent = ({
+    key,
+    unit,
+    name,
+    localizedName,
+    countryCode,
+    country,
+  }) => {
     const payload = {};
     if (key) payload.Key = key;
+    if (unit) payload.unit = unit;
     if (name) payload.name = name;
     if (localizedName) payload.localizedName = localizedName;
     if (countryCode) payload.countryCode = countryCode;
@@ -81,7 +95,7 @@ const WeatherState = ({ children }) => {
     try {
       const res = await axios.request(options);
 
-      dispatch({ type: GET_WEATHER, payload: res.data });
+      dispatch({ type: GET_WEATHER, payload: res.data[0] });
     } catch (error) {
       dispatch({ type: GET_WEATHER_FAIL, payload: error });
     }

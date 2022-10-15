@@ -9,6 +9,14 @@ const WeatherDetails = () => {
 
   const date = new Date().toLocaleTimeString();
 
+  const metric = `${
+    weather?.Temperature?.Metric?.Value.toString().split(".")[0]
+  }°`;
+
+  const imperial = `${
+    weather?.Temperature?.Imperial?.Value.toString().split(".")[0]
+  }°`;
+
   return (
     <div className="text-center pb-8 sm:px-96">
       {false ? (
@@ -111,9 +119,9 @@ const WeatherDetails = () => {
               <h2 className="font-extralight mb-4">{weather?.WeatherText}</h2>
               <h2 className="font-medium text-6xl flex">
                 {current.unit === "metric"
-                  ? `${weather?.Temperature?.Metric?.value}°${weather?.Temperature?.Metric?.value}`
+                  ? metric
                   : current.unit === "standard"
-                  ? `${weather?.Temperature?.Imperial?.value}°${weather?.Temperature?.Imperial?.value}`
+                  ? imperial
                   : null}
               </h2>
             </div>

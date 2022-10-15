@@ -13,8 +13,8 @@ import {
 } from "../types";
 
 const weather = (state, action) => {
-  // console.log("action: \n", action);
-  // console.log("STATE: \n", state);
+  console.log("action: \n", action);
+  console.log("STATE: \n", state);
 
   switch (action.type) {
     case GET_LOCATION:
@@ -24,7 +24,7 @@ const weather = (state, action) => {
         geo: action.payload.map((item) => {
           return {
             key: item?.Key,
-            name: item?.AdministrativeArea?.LocalizedName,
+            name: item?.LocalizedName,
             localizedName: item?.LocalizedName,
             countryCode: item?.Country?.ID,
             country: item?.Country?.LocalizedName,

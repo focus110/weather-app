@@ -3,7 +3,7 @@ import WeatherContext from "../context/weatherData/weatherContext";
 
 const SearchList = ({ item, i, place }) => {
   const weatherContext = useContext(WeatherContext);
-  const { setCurrent } = weatherContext;
+  const { current, setCurrent } = weatherContext;
 
   return (
     <>
@@ -15,6 +15,7 @@ const SearchList = ({ item, i, place }) => {
         <button
           onClick={() =>
             setCurrent({
+              ...current,
               key: item?.key,
               name: item?.name,
               localizedName: item?.localizedName,
