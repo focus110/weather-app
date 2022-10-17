@@ -6,15 +6,18 @@ import {
   CLEAR_STATE,
   SET_CURRENT,
   SET_CURRENT_FAIL,
-  GET_FORECAST,
   GET_FORECAST_FAIL,
   USE_MY_GEO_POSITION,
   USE_MY_GEO_POSITION_FAIL,
+  GET_DAILY_FORECAST,
+  GET_DAILY_FORECAST_FAIL,
+  GET_HOURLY_FORECAST,
+  GET_HOURLY_FORECAST_FAIL,
 } from "../types";
 
 const weather = (state, action) => {
-  console.log("action: \n", action);
-  console.log("STATE: \n", state);
+  // console.log("action: \n", action);
+  // console.log("STATE: \n", state);
 
   switch (action.type) {
     case GET_LOCATION:
@@ -54,10 +57,17 @@ const weather = (state, action) => {
         loading: false,
       };
 
-    case GET_FORECAST:
+    case GET_DAILY_FORECAST:
       return {
         ...state,
-        forecast: action.payload,
+        daily: action.payload,
+        loading: false,
+      };
+
+    case GET_HOURLY_FORECAST:
+      return {
+        ...state,
+        hourly: action.payload,
         loading: false,
       };
 
@@ -66,9 +76,13 @@ const weather = (state, action) => {
     case SET_CURRENT_FAIL:
     case GET_FORECAST_FAIL:
     case USE_MY_GEO_POSITION_FAIL:
+    case GET_DAILY_FORECAST_FAIL:
+    case GET_HOURLY_FORECAST_FAIL:
       return {
         weather: null,
-        forecast: null,
+        unit: "metric",
+        hourly: [],
+        daily: [],
         error: action.payload,
         geo: null,
         loading: false,

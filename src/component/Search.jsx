@@ -6,7 +6,8 @@ import NoResultFound from "./NoResultFound";
 
 const Search = () => {
   const weatherContext = useContext(WeatherContext);
-  const { getWeather, geo, current, loading } = weatherContext;
+  const { getWeather, geo, getHourly, getDaily, current, loading } =
+    weatherContext;
 
   const [place, setplace] = useState([{}]);
   const [focused, setFocused] = useState(false);
@@ -18,7 +19,10 @@ const Search = () => {
 
   useEffect(() => {
     if (current.Key) {
-      getWeather(current);
+      const Key = current.Key;
+      // getWeather(current);
+      getDaily(Key);
+      getHourly(Key);
     }
   }, [current]);
 

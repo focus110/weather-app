@@ -10,9 +10,9 @@ const Main = () => {
   const weatherContext = useContext(WeatherContext);
   const { getWeather } = weatherContext;
 
-  useEffect(() => {
-    // getWeather("254085");
-  }, []);
+  // useEffect(() => {
+  // getWeather("254085");
+  // }, [])
 
   return (
     <div className="bg__img">

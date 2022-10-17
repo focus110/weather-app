@@ -10,10 +10,12 @@ import {
   CLEAR_STATE,
   SET_CURRENT,
   SET_CURRENT_FAIL,
-  GET_FORECAST,
-  GET_FORECAST_FAIL,
   USE_MY_GEO_POSITION,
   USE_MY_GEO_POSITION_FAIL,
+  GET_DAILY_FORECAST,
+  GET_DAILY_FORECAST_FAIL,
+  GET_HOURLY_FORECAST,
+  GET_HOURLY_FORECAST_FAIL,
 } from "../types";
 
 const WeatherState = ({ children }) => {
@@ -21,7 +23,8 @@ const WeatherState = ({ children }) => {
     error: null,
     geo: null,
     loading: true,
-    weather: null,
+    weather: [],
+    unit: "metric",
     current: {
       Key: "254085",
       country: "Nigeria",
@@ -29,7 +32,8 @@ const WeatherState = ({ children }) => {
       localizedName: "Abuja",
       name: "Abuja",
     },
-    forecast: { hourly: null, daily: null },
+    hourly: [],
+    daily: [],
   };
 
   const [state, dispatch] = useReducer(weatherReducer, initialState);
@@ -84,7 +88,7 @@ const WeatherState = ({ children }) => {
       url: `${ACCU_WEATHER_API_URL}/currentconditions/v1/${Key}`,
       params: {
         apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY,
-        details: false,
+        details: true,
       },
       header: {
         "Access-Control-Allow-Origin": "*",
@@ -124,16 +128,53 @@ const WeatherState = ({ children }) => {
     }
   };
 
-  // GET FORECAST
-  const getForecast = async ({ lat, lon }) => {
-    const options = {};
+  // GET DAILY FORECAST
+  const getDaily = async (Key) => {
+    const options = {
+      method: "GET",
+      url: `${ACCU_WEATHER_API_URL}/forecasts/v1/daily/5day/${Key}`,
+      params: {
+        apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY,
+        details: true,
+        metric: true,
+      },
+      header: {
+        "Access-Control-Allow-Origin": "*",
+        Host: "dataservice.accuweather.com",
+      },
+    };
 
     try {
       const res = await axios.request(options);
 
-      dispatch({ type: GET_FORECAST, payload: res });
+      dispatch({ type: GET_DAILY_FORECAST, payload: res.data.DailyForecasts });
     } catch (error) {
-      dispatch({ type: GET_FORECAST_FAIL, payload: error });
+      dispatch({ type: GET_DAILY_FORECAST_FAIL, payload: error });
+    }
+  };
+
+  // GET HOURLY FORECAST
+  const getHourly = async (Key) => {
+    const options = {
+      method: "GET",
+      url: `${ACCU_WEATHER_API_URL}/forecasts/v1/hourly/12hour/${Key}`,
+      params: {
+        apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY,
+        details: true,
+        metric: true,
+      },
+      header: {
+        "Access-Control-Allow-Origin": "*",
+        Host: "dataservice.accuweather.com",
+      },
+    };
+
+    try {
+      const res = await axios.request(options);
+
+      dispatch({ type: GET_HOURLY_FORECAST, payload: res.data });
+    } catch (error) {
+      dispatch({ type: GET_HOURLY_FORECAST_FAIL, payload: error });
     }
   };
 
@@ -147,14 +188,17 @@ const WeatherState = ({ children }) => {
         geo: state.geo,
         loading: state.loading,
         weather: state.weather,
-        forecast: state.forecast,
+        hourly: state.hourly,
+        daily: state.daily,
+        unit: state.unit,
         current: state.current,
         autocomplete,
         getWeather,
         useMyGeoPos,
         clearState,
-        getForecast,
         setCurrent,
+        getDaily,
+        getHourly,
       }}
     >
       {children}
