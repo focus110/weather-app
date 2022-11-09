@@ -1,18 +1,26 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cloudy from "../assets/images/cloudy.png";
 import WeatherContext from "../context/weatherData/weatherContext";
 import Title from "./Title";
 
 const WeatherDetails = () => {
   const weatherContext = useContext(WeatherContext);
-  const { daily, current, unit } = weatherContext;
+  const { weather, daily, current, unit } = weatherContext;
 
   const date = new Date().toLocaleTimeString();
 
-  const metric = `${Math.round(daily[0]?.Temperature?.Maximum?.Value)}°`;
+  useEffect(() => {
+    if (unit === "metric") {
+    } else if (unit === "") {
+    }
+  }, [unit]);
+
+  const metric = `${
+    weather?.Temperature?.Metric?.Value.toString().split(".")[0]
+  }°`;
 
   const imperial = `${
-    daily[0]?.Temperature?.Mximum?.Value.toString().split(".")[0]
+    weather?.Temperature?.Imperial?.Value.toString().split(".")[0]
   }°`;
 
   const weatherPhrase = daily[0]?.Day?.IconPhrase.split("w/")[0];

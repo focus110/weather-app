@@ -1,9 +1,13 @@
 import React, { useContext } from "react";
 import WeatherContext from "../context/weatherData/weatherContext";
+import SaveWeatherContext from "../context/weather/weatherContext";
 
 const SearchList = ({ item, i, place }) => {
   const weatherContext = useContext(WeatherContext);
   const { current, setCurrent, getHourly } = weatherContext;
+
+  const saveWeatherContext = useContext(SaveWeatherContext);
+  const { getAllWeather, saveWeather } = saveWeatherContext;
 
   return (
     <>
@@ -22,13 +26,20 @@ const SearchList = ({ item, i, place }) => {
               countryCode: item?.countryCode,
               country: item?.country,
             });
+            saveWeather({
+              location: "onload",
+              weather_desc: "rainy",
+              temperature: "25",
+              humidity: "7.9",
+            });
             // getHourly(item?.key);
           }}
         >
-          {item?.name + ","}
+          <span>{item?.name + ","}</span>
+
+          <span>{item?.countryCode?.toUpperCase() + ","}</span>
+          <span>{item?.country}</span>
         </button>
-        <span>{item?.countryCode?.toUpperCase() + ","}</span>
-        <span>{item?.country}</span>
       </p>
     </>
   );

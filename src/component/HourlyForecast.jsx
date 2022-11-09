@@ -11,27 +11,29 @@ const HourlyForecast = () => {
     return (
       <div
         key={i}
-        className="text-left bg-white bg-opacity-10 space-y-2 bg-transparent rounded px-8 py-4"
+        className="h-40 w-50 text-left bg-white bg-opacity-10 bg-transparent rounded px-8 py-4"
       >
-        <h2 className="font-light text-base border-gray-500 border-opacity-10 border-b pb-2 text-gray-500">
-          {item?.DateTime?.toString().split("T")[1].slice(0, 4)}
-        </h2>
-        <div className="sm:w-24 flex flex-col-reverse sm:flex-row items-center space-x-4 justify-between">
-          <div>
-            <h2 className="font-semibold text-white sm:text-sm">
-              {item.Temperature.Value?.toString().split(".")[0]}°
-            </h2>
-            <h2 className="font-medium text-gray-500 sm:text-sm ">
-              {item.IconPhrase}
-            </h2>
-          </div>
+        <div className="w-50 space-y-2">
+          <h2 className="font-light text-base border-gray-500 border-opacity-10 border-b pb-2 text-gray-500">
+            {item?.DateTime?.toString().split("T")[1].slice(0, 4)}
+          </h2>
+          <div className="sm:w-24 flex flex-col-reverse sm:flex-row items-center space-x-4 justify-between">
+            <div className="">
+              <h2 className="font-semibold text-white sm:text-sm">
+                {item.Temperature.Value?.toString().split(".")[0]}°
+              </h2>
+              <h2 className="font-medium text-gray-500 sm:text-sm ">
+                {item.IconPhrase}
+              </h2>
+            </div>
 
-          <div>
-            <img
-              className="object-contain w-16 h-16 sm:w-12 sm:h-12"
-              src={cloudy}
-              alt=""
-            />
+            <div>
+              <img
+                className="object-contain w-16 h-16 sm:w-12 sm:h-12"
+                src={cloudy}
+                alt=""
+              />
+            </div>
           </div>
         </div>
       </div>

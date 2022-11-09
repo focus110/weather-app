@@ -41,7 +41,7 @@ const SearchForm = ({ setFocused, setplace }) => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="flex-1">
       <div className="bg-white bg-opacity-10 flex pl-8 rounded">
         <input
           onFocus={onFocus}

@@ -23,14 +23,14 @@ const WeatherState = ({ children }) => {
     error: null,
     geo: null,
     loading: true,
-    weather: [],
+    weather: null,
     unit: "metric",
     current: {
-      Key: "254085",
-      country: "Nigeria",
-      countryCode: "NG",
-      localizedName: "Abuja",
-      name: "Abuja",
+      // Key: "254085",
+      // country: "Nigeria",
+      // countryCode: "NG",
+      // localizedName: "Abuja",
+      // name: "Abuja",
     },
     hourly: [],
     daily: [],
@@ -71,6 +71,8 @@ const WeatherState = ({ children }) => {
       method: "GET",
       url: ACCU_WEATHER_API_URL + "/locations/v1/cities/autocomplete",
       params: { q, apikey: process.env.REACT_APP_ACCU_WEATHER_API_KEY },
+      "Access-Control-Allow-Headers":
+        "origin, x-requested-with, accept, x-auth-token",
     };
 
     try {
